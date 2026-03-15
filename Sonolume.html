@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sonolume</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+color:white;
+background:
+radial-gradient(circle at top left,#6a44ff33,transparent 40%),
+radial-gradient(circle at top right,#3ed8ff33,transparent 40%),
+radial-gradient(circle at bottom,#ff4fd833,transparent 40%),
+#070814;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:30px;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+}
+
+.logo{
+font-size:1.4rem;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+nav a{
+margin-left:20px;
+color:#c9d0ff;
+text-decoration:none;
+}
+
+.hero{
+text-align:center;
+padding:80px 20px;
+}
+
+.hero h1{
+font-size:4rem;
+margin:0;
+background:linear-gradient(90deg,#8ad6ff,#a98fff,#ff8ad6);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.subtitle{
+max-width:600px;
+margin:auto;
+margin-top:20px;
+color:#b6bedb;
+line-height:1.6;
+}
+
+.buttons{
+margin-top:30px;
+}
+
+.button{
+display:inline-block;
+padding:12px 20px;
+border-radius:10px;
+border:1px solid #ffffff22;
+margin:5px;
+background:#ffffff0d;
+text-decoration:none;
+color:white;
+}
+
+.projects{
+margin-top:60px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:#ffffff08;
+border:1px solid #ffffff14;
+padding:25px;
+border-radius:18px;
+}
+
+.card h3{
+margin-top:0;
+}
+
+.card p{
+color:#b6bedb;
+}
+
+.card a{
+text-decoration:none;
+color:#8ad6ff;
+font-weight:bold;
+}
+
+.about{
+margin-top:60px;
+background:#ffffff08;
+padding:30px;
+border-radius:18px;
+border:1px solid #ffffff14;
+color:#b6bedb;
+line-height:1.6;
+}
+
+footer{
+margin-top:80px;
+text-align:center;
+color:#7f86a8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<div class="logo">SONOLUME</div>
+<nav>
+<a href="#projects">Projects</a>
+<a href="#about">About</a>
+<a href="https://github.com">GitHub</a>
+</nav>
+</header>
+
+<section class="hero">
+
+<h1>Sonolume</h1>
+
+<p class="subtitle">
+Experimental musical interfaces where sound and light meet.
+A growing collection of visual instruments for exploring harmony,
+string mapping, and musical structure.
+</p>
+
+<div class="buttons">
+<a class="button" href="#projects">Explore Projects</a>
+<a class="button" href="https://github.com">View GitHub</a>
+</div>
+
+</section>
+
+<section id="projects">
+
+<div class="projects">
+
+<div class="card">
+<h3>Nebular</h3>
+<p>
+An interactive MIDI grid for exploring harmonic relationships,
+note layouts, and visual music theory.
+</p>
+<a href="./nebular/">Open Nebular →</a>
+</div>
+
+<div class="card">
+<h3>Spectrello</h3>
+<p>
+A spectral fretboard interface for string instruments,
+phase navigation, and harmonic exploration.
+</p>
+<a href="./spectrello/">Open Spectrello →</a>
+</div>
+
+<div class="card">
+<h3>Future Instruments</h3>
+<p>
+Additional experimental musical tools and visual interfaces
+will appear here as the Sonolume ecosystem grows.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="about">
+
+<div class="about">
+
+<h2>About Sonolume</h2>
+
+<p>
+Sonolume is an experimental platform for designing new musical interfaces
+that connect sound and light through visual structure.
+</p>
+
+<p>
+Projects like Nebular and Spectrello explore harmonic relationships,
+instrument geometry, and new ways to interact with music.
+Future instruments and visual tools will continue expanding the system.
+</p>
+
+</div>
+
+</section>
+
+<footer>
+Sonolume — sound • light • instruments
+</footer>
+
+</div>
+
+</body>
+</html>
