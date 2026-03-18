@@ -251,6 +251,20 @@
       transform:translateY(-50%);
       border-radius:999px;
       background:rgba(255,255,255,.20);
+      overflow:visible;
+    }
+    .string-line::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:36%;
+      height:100%;
+      transform:translate(-50%,-50%);
+      border-radius:999px;
+      background:var(--note-color, rgba(255,255,255,.12));
+      opacity:1;
+      box-shadow:0 0 6px var(--note-color);
     }
     .anchor, .active-dot{
       position:absolute;
@@ -388,6 +402,7 @@
         </label>
         <button id="audioBtn">Audio: On</button>
         <button id="resetBtn">Reset Atoms</button>
+        <label style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.78);font-size:14px;"><input id="matchScale" type="checkbox" /> <span>Match scale</span></label>
         <button id="panicBtn">Stop Notes</button>
       </div>
     </div>
@@ -452,7 +467,23 @@
   function mod(n,m){ return ((n % m) + m) % m; }
   function noteNameFromPc(pc){ return NOTE_NAMES[mod(pc,12)]; }
   function colorForPc(pc){ return NOTE_COLORS[noteNameFromPc(pc)]; }
-  function createDefaultAtom(openPc){ return { selected: new Set([0]) }; }
+  function createDefaultAtom(openPc){ return { selected: new Set() }; }
+
+  function semitoneToPhaseIndexForString(semitoneRelativeToOpen){
+    return SEMITONE_TO_PHASE_INDEX[mod(semitoneRelativeToOpen, 12)];
+  }
+
+  function buildMatchedSelectionsFromSource(sourceStringIndex, sourcePhaseIndex, shouldAdd){
+    const sourceOpen = OPEN_PITCH_CLASSES[sourceStringIndex];
+    const sourceSemitone = PHASE_SEMITONES[sourcePhaseIndex];
+    const absolutePitchClass = mod(sourceOpen + sourceSemitone, 12);
+
+    return OPEN_PITCH_CLASSES.map((openPc, stringIndex) => {
+      const relativeSemitone = mod(absolutePitchClass - openPc, 12);
+      const phaseIndex = semitoneToPhaseIndexForString(relativeSemitone);
+      return { stringIndex, phaseIndex };
+    });
+  }
   function semitoneIsActive(atom, pitchClass, openPitchClass){
     const relative = mod(pitchClass - openPitchClass, 12);
     const phaseIndex = SEMITONE_TO_PHASE_INDEX[relative];
@@ -463,6 +494,7 @@
   let releaseMs = 700;
   let masterVolume = 0.8;
   let audioEnabled = true;
+  let matchScale = false;
 
   const atomsEl = document.getElementById("atoms");
   const gridEl = document.getElementById("grid");
@@ -472,6 +504,7 @@
   const volumeEl = document.getElementById("volume");
   const audioBtn = document.getElementById("audioBtn");
   const resetBtn = document.getElementById("resetBtn");
+  const matchScaleEl = document.getElementById("matchScale");
 
   let audioContext = null;
   let masterGain = null;
@@ -611,9 +644,20 @@
         const g = document.createElementNS(svgNS, "g");
         g.style.cursor = "pointer";
         g.addEventListener("click", () => {
-          const next = new Set(atom.selected);
-          if(next.has(n)) next.delete(n); else next.add(n);
-          atoms[i] = { selected: next };
+          if(matchScale){
+            const shouldAdd = !atom.selected.has(n);
+            const nextAtoms = atoms.map(a => ({ selected: new Set(a.selected) }));
+            const matches = buildMatchedSelectionsFromSource(i, n, shouldAdd);
+            matches.forEach(({ stringIndex, phaseIndex }) => {
+              if(shouldAdd) nextAtoms[stringIndex].selected.add(phaseIndex);
+              else nextAtoms[stringIndex].selected.delete(phaseIndex);
+            });
+            atoms = nextAtoms;
+          } else {
+            const next = new Set(atom.selected);
+            if(next.has(n)) next.delete(n); else next.add(n);
+            atoms[i] = { selected: next };
+          }
           renderAll();
         });
 
@@ -692,6 +736,7 @@
 
         const btn = document.createElement("div");
         btn.className = "zone";
+        btn.style.setProperty("--note-color", zone.color);
         if(position === 0) btn.classList.add("first-zone");
         if(position === POSITIONS.length - 1) btn.classList.add("last-zone");
         if(s === 4) btn.classList.add("top-row");
@@ -797,6 +842,10 @@
   audioBtn.addEventListener("click", () => {
     audioEnabled = !audioEnabled;
     audioBtn.textContent = `Audio: ${audioEnabled ? "On" : "Off"}`;
+  });
+
+  matchScaleEl.addEventListener("change", () => {
+    matchScale = matchScaleEl.checked;
   });
 
   resetBtn.addEventListener("click", () => {
